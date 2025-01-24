@@ -1,0 +1,62 @@
+
+        public class OddEvenThread {
+    
+   
+    private static final Object lock = new Object(); 
+    
+    public static void main(String[] args) {
+       
+        Thread oddThread = new Thread(new OddNumberPrinter());
+        Thread evenThread = new Thread(new EvenNumberPrinter());
+        
+        
+        oddThread.start();
+        evenThread.start();
+        
+        
+        try {
+            oddThread.join();
+            evenThread.join();
+        } catch (InterruptedException e) {
+            System.out.println("Thread interrupted: " + e.getMessage());
+        }
+        
+        System.out.println("Both threads have completed printing numbers.");
+    }
+
+   
+    static class OddNumberPrinter implements Runnable {
+        @Override
+        public void run() {
+            try {
+                for (int i = 1; i <= 20; i += 2) {
+                    synchronized (lock) {  
+                        System.out.println("Odd: " + i);
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("An error occurred in OddNumberPrinter: " + e.getMessage());
+            }
+        }
+    }
+
+  
+    static class EvenNumberPrinter implements Runnable {
+        @Override
+        public void run() {
+            try {
+                for (int i = 2; i <= 20; i += 2) {
+                    synchronized (lock) {  
+                        System.out.println("Even: " + i);
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("An error occurred in EvenNumberPrinter: " + e.getMessage());
+            }
+        }
+    }
+}
+        
+    }
+    
+}
